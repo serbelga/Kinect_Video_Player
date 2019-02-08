@@ -1,0 +1,32 @@
+﻿<Window x:Class="KinectMultimediaPlayer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:k="http://schemas.microsoft.com/kinect/2013"
+        xmlns:local="clr-namespace:KinectMultimediaPlayer"
+        mc:Ignorable="d"
+        Title="Kinect Player" Height="450" Width="800" Loaded="Window_Loaded">
+    <Grid>
+        <Label Content="Vídeos recientes" HorizontalAlignment="Left" Margin="20,30,0,0" VerticalAlignment="Top"/>
+        <Label Content="Música reciente" HorizontalAlignment="Left" Margin="22,175,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.376,0.615"/>
+        <k:KinectRegion Name="kinectRegion">
+            <Grid>
+                <MediaElement Source="Assets/sample.mp4" Name="mediaElement" 
+                    Width="720" Height="480" LoadedBehavior="Manual" UnloadedBehavior="Stop" Stretch="Fill" 
+                    MediaOpened="Element_MediaOpened" MediaEnded="Element_MediaEnded"/>
+                <k:KinectCircleButton HorizontalAlignment="Right" FontFamily="Segoe MDL2 Assets" Height="100" Click="ButtonOnClick" RenderTransformOrigin="0.513,0.527" Margin="0,286,302,33" Width="164" >
+                    <TextBox Text="&#xE768;" Background="{x:Null}"></TextBox>
+                </k:KinectCircleButton>
+                <k:KinectCircleButton HorizontalAlignment="Right" FontFamily="Segoe MDL2 Assets" Height="100" Click="PauseOnClick" RenderTransformOrigin="0.513,0.527" Margin="0,286,138,33" Width="164" >
+                    <TextBox Text="&#xEDB4;" Background="{x:Null}"></TextBox>
+                </k:KinectCircleButton>
+                <k:KinectScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto" VerticalAlignment="Bottom">
+                    <StackPanel Orientation="Horizontal" Name="scrollContent">
+                    </StackPanel>
+                </k:KinectScrollViewer>
+            </Grid>
+        </k:KinectRegion>
+        <k:KinectSensorChooserUI HorizontalAlignment="Center" VerticalAlignment="Top" Name="sensorChooserUi"></k:KinectSensorChooserUI>
+    </Grid>
+</Window>

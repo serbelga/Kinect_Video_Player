@@ -93,6 +93,12 @@ namespace KinectMultimediaPlayer
             mediaElement.Pause();
         }
 
+        private void StopOnClick(object sender, RoutedEventArgs e)
+        {
+
+            mediaElement.Stop();
+        }
+
         private void Element_MediaEnded(object sender, RoutedEventArgs e)
         {
 

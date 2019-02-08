@@ -12,16 +12,23 @@
         <Label Content="Música reciente" HorizontalAlignment="Left" Margin="22,175,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.376,0.615"/>
         <k:KinectRegion Name="kinectRegion">
             <Grid>
-                <MediaElement Source="Assets/sample.mp4" Name="mediaElement" 
-                    Width="720" Height="480" LoadedBehavior="Manual" UnloadedBehavior="Stop" Stretch="Fill" 
-                    MediaOpened="Element_MediaOpened" MediaEnded="Element_MediaEnded"/>
-                <k:KinectCircleButton HorizontalAlignment="Right" FontFamily="Segoe MDL2 Assets" Height="100" Click="ButtonOnClick" RenderTransformOrigin="0.513,0.527" Margin="0,286,302,33" Width="164" >
-                    <TextBox Text="&#xE768;" Background="{x:Null}"></TextBox>
+                <!--
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="13*"/>
+                    <ColumnDefinition Width="383*"/>
+                </Grid.ColumnDefinitions>-->
+                <MediaElement Source="Assets/sample.mp4" Name="mediaElement" LoadedBehavior="Manual" UnloadedBehavior="Stop" Stretch="Fill" 
+                    MediaOpened="Element_MediaOpened" HorizontalAlignment="Center" MediaEnded="Element_MediaEnded" Grid.Column="1"/>
+                <k:KinectCircleButton HorizontalAlignment="Center" FontFamily="Segoe MDL2 Assets" Height="150" Click="ButtonOnClick" Margin="314,219,313,0" Foreground="#FFAEAEAE">
+                    <TextBlock Text="&#xE768;" Background="{x:Null}" IsEnabled="False"></TextBlock>
                 </k:KinectCircleButton>
-                <k:KinectCircleButton HorizontalAlignment="Right" FontFamily="Segoe MDL2 Assets" Height="100" Click="PauseOnClick" RenderTransformOrigin="0.513,0.527" Margin="0,286,138,33" Width="164" >
-                    <TextBox Text="&#xEDB4;" Background="{x:Null}"></TextBox>
+                <k:KinectCircleButton HorizontalAlignment="Center" FontFamily="Segoe MDL2 Assets" Height="150" Click="StopOnClick" Margin="149,244,478,25" Foreground="#FFAEAEAE">
+                    <TextBlock Text="&#xE777;" Background="{x:Null}" IsEnabled="False"></TextBlock>
                 </k:KinectCircleButton>
-                <k:KinectScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto" VerticalAlignment="Bottom">
+                <k:KinectCircleButton HorizontalAlignment="Center" FontFamily="Segoe MDL2 Assets" Height="150" Click="PauseOnClick" Margin="484,244,143,25" Foreground="#FFAEAEAE">
+                    <TextBlock Text="&#xEDB4;" Background="{x:Null}" IsEnabled="False"></TextBlock>
+                </k:KinectCircleButton>
+                <k:KinectScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto" VerticalAlignment="Bottom" Grid.ColumnSpan="2">
                     <StackPanel Orientation="Horizontal" Name="scrollContent">
                     </StackPanel>
                 </k:KinectScrollViewer>

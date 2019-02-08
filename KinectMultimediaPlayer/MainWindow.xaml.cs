@@ -37,6 +37,8 @@ namespace KinectMultimediaPlayer
             this.sensorChooser.Start();
         }
 
+        
+
         private void SensorChooserOnKinectChanged(object sender, KinectChangedEventArgs args)
         {
             MessageBox.Show(args.NewSensor == null ? "No Kinect" : args.NewSensor.Status.ToString());
@@ -81,32 +83,10 @@ namespace KinectMultimediaPlayer
             }
         }
 
-        private void ButtonOnClick(object sender, RoutedEventArgs e)
+        private void PlayVideo(object sender, RoutedEventArgs e)
         {
-            
-            mediaElement.Play();
-        }
-
-        private void PauseOnClick(object sender, RoutedEventArgs e)
-        {
-
-            mediaElement.Pause();
-        }
-
-        private void StopOnClick(object sender, RoutedEventArgs e)
-        {
-
-            mediaElement.Stop();
-        }
-
-        private void Element_MediaEnded(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void Element_MediaOpened(object sender, RoutedEventArgs e)
-        {
-
+            VideoPlayer videoPlayer = new VideoPlayer();
+            videoPlayer.Show();
         }
     }
 }

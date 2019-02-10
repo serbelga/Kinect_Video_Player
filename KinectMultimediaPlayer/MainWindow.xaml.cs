@@ -14,6 +14,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Kinect.Toolkit;
 using Microsoft.Kinect;
+using Microsoft.Kinect.Toolkit.Controls;
+using System.IO;
 
 namespace KinectMultimediaPlayer
 {
@@ -23,10 +25,43 @@ namespace KinectMultimediaPlayer
     public partial class MainWindow : Window
     {
         private KinectSensorChooser sensorChooser;
+        public FileInfo[] videos;
+         
 
         public MainWindow()
         {
             InitializeComponent();
+            DirectoryInfo d = new DirectoryInfo(@"Assets");
+            videos = d.GetFiles("*.mp4");
+            buildListView();
+        }
+
+        private void buildListView()
+        {
+            for (int i = 0; i < videos.Length; i++)
+            {
+                KinectTileButton button = new KinectTileButton();
+                button.Label = videos[i].Name;
+                button.Width = Double.NaN;
+                button.Height = Double.NaN;
+                button.FontSize = 18.0;
+                button.Tag = videos[i].FullName.ToString();
+
+                scrollContent.Children.Insert(0, button);
+                button.Click += ScrollButtonClick;
+            }
+        }
+
+        private void ScrollButtonClick(object sender, RoutedEventArgs e)
+
+        {
+
+            KinectTileButton button = (KinectTileButton) sender;
+
+            MessageBox.Show("Botón: " + button.Tag);
+            
+            VideoPlayer videoPlayer = new VideoPlayer(button.Tag as String);
+            videoPlayer.Show();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -85,8 +120,8 @@ namespace KinectMultimediaPlayer
 
         private void PlayVideo(object sender, RoutedEventArgs e)
         {
-            VideoPlayer videoPlayer = new VideoPlayer();
-            videoPlayer.Show();
+            //VideoPlayer videoPlayer = new VideoPlayer();
+            //videoPlayer.Show();
         }
     }
 }

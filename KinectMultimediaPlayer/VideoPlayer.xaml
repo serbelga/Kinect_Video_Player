@@ -9,8 +9,6 @@
         mc:Ignorable="d"
         Title="VideoPlayer" Height="450" Width="800">
     <Grid>
-        <Label Content="Vídeos recientes" HorizontalAlignment="Left" Margin="20,30,0,0" VerticalAlignment="Top"/>
-        <Label Content="Música reciente" HorizontalAlignment="Left" Margin="22,175,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.376,0.615"/>
         <k:KinectRegion Name="kinectRegion">
             <Grid>
                 <!--
@@ -18,7 +16,7 @@
                     <ColumnDefinition Width="13*"/>
                     <ColumnDefinition Width="383*"/>
                 </Grid.ColumnDefinitions>-->
-                <MediaElement Source="Assets/sample.mp4" Name="mediaElement" LoadedBehavior="Manual" UnloadedBehavior="Stop" Stretch="Fill" 
+                <MediaElement Name="mediaElement" LoadedBehavior="Manual" UnloadedBehavior="Stop" Stretch="Fill" 
                     MediaOpened="Element_MediaOpened" HorizontalAlignment="Center" MediaEnded="Element_MediaEnded" Grid.Column="1"/>
                 <k:KinectCircleButton HorizontalAlignment="Center" FontFamily="Segoe MDL2 Assets" Height="150" Click="ButtonOnClick" Margin="314,219,313,0" Foreground="#FFAEAEAE">
                     <TextBlock Text="&#xE768;" Background="{x:Null}" IsEnabled="False"></TextBlock>

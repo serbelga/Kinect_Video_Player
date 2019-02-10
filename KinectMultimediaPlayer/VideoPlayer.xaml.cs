@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,9 +20,12 @@ namespace KinectMultimediaPlayer
     /// </summary>
     public partial class VideoPlayer : Window
     {
-        public VideoPlayer()
+        public VideoPlayer(String directory)
         {
             InitializeComponent();
+            Uri uri = new Uri(directory);
+            mediaElement.Source = uri;
+            mediaElement.Play();
         }
 
         private void ButtonOnClick(object sender, RoutedEventArgs e)

@@ -1,17 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Microsoft.Kinect.Toolkit;
 using Microsoft.Kinect;
 using Microsoft.Kinect.Toolkit.Controls;
@@ -20,23 +8,32 @@ using System.IO;
 namespace KinectMultimediaPlayer
 {
     /// <summary>
-    /// Lógica de interacción para MainWindow.xaml
+    /// Interaction for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
         private KinectSensorChooser sensorChooser;
+
+        /// <summary>
+        /// List of FileInfo. Videos in Assets folder
+        /// </summary>
         public FileInfo[] videos;
          
-
+        /// <summary>
+        /// Class constructor
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
-            DirectoryInfo d = new DirectoryInfo(@"Assets");
-            videos = d.GetFiles("*.mp4");
-            buildListView();
+            DirectoryInfo directoryInfo = new DirectoryInfo(@"Assets");
+            videos = directoryInfo.GetFiles("*.mp4");
+            BuildListView();
         }
 
-        private void buildListView()
+        /// <summary>
+        /// Builds the ListView
+        /// </summary>
+        private void BuildListView()
         {
             for (int i = 0; i < videos.Length; i++)
             {
@@ -52,14 +49,15 @@ namespace KinectMultimediaPlayer
             }
         }
 
+        /// <summary>
+        /// List View button click
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ScrollButtonClick(object sender, RoutedEventArgs e)
 
         {
-
             KinectTileButton button = (KinectTileButton) sender;
-
-            MessageBox.Show("Botón: " + button.Tag);
-            
             VideoPlayer videoPlayer = new VideoPlayer(button.Tag as String);
             videoPlayer.Show();
         }
@@ -71,9 +69,12 @@ namespace KinectMultimediaPlayer
             this.sensorChooserUi.KinectSensorChooser = this.sensorChooser;
             this.sensorChooser.Start();
         }
-
         
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
         private void SensorChooserOnKinectChanged(object sender, KinectChangedEventArgs args)
         {
             MessageBox.Show(args.NewSensor == null ? "No Kinect" : args.NewSensor.Status.ToString());
@@ -89,9 +90,6 @@ namespace KinectMultimediaPlayer
                 }
                 catch (InvalidOperationException)
                 {
-                    // KinectSensor entra en estado invalid mientras se habilitan/deshabilitan
-                    // streams.
-                    // Ej.: Se desconecta sensor de forma abrupta.
                     error = true;
                 }
             }
@@ -99,9 +97,6 @@ namespace KinectMultimediaPlayer
             {
                 try
                 {
-                    //ToDo: Habilite el stream de profundidad con formato Resolution640x480Fps30
-                    //ToDo: Habilite el stream de esqueletos
-                    //Hint: Utilice args.NewSensor
                     args.NewSensor.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
                     args.NewSensor.SkeletonStream.Enable();
                 }
@@ -112,16 +107,8 @@ namespace KinectMultimediaPlayer
             }
             if (!error)
             {
-
-
                 kinectRegion.KinectSensor = args.NewSensor;
             }
-        }
-
-        private void PlayVideo(object sender, RoutedEventArgs e)
-        {
-            //VideoPlayer videoPlayer = new VideoPlayer();
-            //videoPlayer.Show();
         }
     }
 }

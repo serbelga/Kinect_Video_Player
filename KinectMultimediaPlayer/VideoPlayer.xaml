@@ -18,7 +18,7 @@
                 </Grid.ColumnDefinitions>-->
                 <MediaElement Name="mediaElement" LoadedBehavior="Manual" UnloadedBehavior="Stop" Stretch="Fill" 
                     MediaOpened="Element_MediaOpened" HorizontalAlignment="Center" MediaEnded="Element_MediaEnded" Grid.Column="1"/>
-                <k:KinectCircleButton HorizontalAlignment="Center" FontFamily="Segoe MDL2 Assets" Height="150" Click="ButtonOnClick" Margin="314,219,313,0" Foreground="#FFAEAEAE">
+                <k:KinectCircleButton HorizontalAlignment="Center" FontFamily="Segoe MDL2 Assets" Height="150" Click="PlayOnClick" Margin="314,219,313,0" Foreground="#FFAEAEAE">
                     <TextBlock Text="&#xE768;" Background="{x:Null}" IsEnabled="False"></TextBlock>
                 </k:KinectCircleButton>
                 <k:KinectCircleButton HorizontalAlignment="Center" FontFamily="Segoe MDL2 Assets" Height="150" Click="StopOnClick" Margin="149,244,478,25" Foreground="#FFAEAEAE">

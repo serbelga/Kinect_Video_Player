@@ -8,12 +8,11 @@
         mc:Ignorable="d"
         Title="Kinect Player" Height="450" Width="800" Loaded="Window_Loaded">
     <Grid>
-        <Label Content="Mis Vídeos" HorizontalAlignment="Left" Margin="35,94,0,0" VerticalAlignment="Top" FontFamily="Segoe UI Semibold" FontSize="16"/>
+        <Label Content="Mis Vídeos" HorizontalAlignment="Left" Margin="23,95,0,0" VerticalAlignment="Top" FontFamily="Segoe UI Semibold" FontSize="16"/>
         <k:KinectRegion Name="kinectRegion">
             <Grid>
-                <k:KinectScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto" VerticalAlignment="Bottom" Margin="0,0,0,100">
+                <k:KinectScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto" VerticalAlignment="Center" Margin="0,0,0,0">
                     <StackPanel Orientation="Horizontal" Name="scrollContent" Height="169">
-                        <k:KinectTileButton Label="Snow Leopard BBC" Click="PlayVideo" Margin="0,0,0,0" Height="Auto" Width="Auto" FontSize="18" Background="#FF2B8CC3"></k:KinectTileButton>
                     </StackPanel>
                 </k:KinectScrollViewer>
             </Grid>

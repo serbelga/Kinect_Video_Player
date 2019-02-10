@@ -1,25 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace KinectMultimediaPlayer
 {
     /// <summary>
-    /// Lógica de interacción para VideoPlayer.xaml
+    /// Interaction for VideoPlayer.xaml
     /// </summary>
     public partial class VideoPlayer : Window
     {
+        /// <summary>
+        /// Class constructor
+        /// </summary>
+        /// <param name="directory">Path to the video file</param>
         public VideoPlayer(String directory)
         {
             InitializeComponent();
@@ -28,18 +20,32 @@ namespace KinectMultimediaPlayer
             mediaElement.Play();
         }
 
-        private void ButtonOnClick(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Play video button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void PlayOnClick(object sender, RoutedEventArgs e)
         {
-
             mediaElement.Play();
         }
 
+        /// <summary>
+        /// Pause video button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void PauseOnClick(object sender, RoutedEventArgs e)
         {
 
             mediaElement.Pause();
         }
 
+        /// <summary>
+        /// Stop video button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void StopOnClick(object sender, RoutedEventArgs e)
         {
 

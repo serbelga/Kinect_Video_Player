@@ -8,8 +8,12 @@
         mc:Ignorable="d"
         Title="Kinect Player" Height="450" Width="800" Loaded="Window_Loaded">
     <Grid>
-        <Label Content="Mis Vídeos" HorizontalAlignment="Left" Margin="23,95,0,0" VerticalAlignment="Top" FontFamily="Segoe UI Semibold" FontSize="16"/>
-        <k:KinectRegion Name="kinectRegion">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" Content="Mis Vídeos" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="24,64,0,8" FontFamily="Segoe UI Semibold" FontSize="16"/>
+        <k:KinectRegion Name="kinectRegion" Grid.Row="1">
             <Grid>
                 <k:KinectScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto" VerticalAlignment="Center" Margin="0,0,0,0">
                     <StackPanel Orientation="Horizontal" Name="scrollContent" Height="169">

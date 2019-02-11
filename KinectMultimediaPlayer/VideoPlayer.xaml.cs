@@ -5,11 +5,17 @@ using System.Windows;
 
 namespace KinectMultimediaPlayer
 {
+    
     /// <summary>
     /// Interaction for VideoPlayer.xaml
     /// </summary>
     public partial class VideoPlayer : Window
     {
+        private KinectSensor sensor;
+        //private SwipeGestureDetector swipeGestureDetector;
+        //private TemplatedGestureDetector circleGestureRecognizer;
+
+
         /// <summary>
         /// Class constructor
         /// </summary>
@@ -56,7 +62,7 @@ namespace KinectMultimediaPlayer
 
         private void Element_MediaEnded(object sender, RoutedEventArgs e)
         {
-            //TO DO : Hide video controls + Show Restart and Back
+            //TODO : Hide video controls + Show Restart and Back
         }
 
         private void Element_MediaOpened(object sender, RoutedEventArgs e)
@@ -105,6 +111,11 @@ namespace KinectMultimediaPlayer
             {
                 kinectRegion.KinectSensor = args.NewSensor;
             }
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            //swipeGestureDetector = new SwipeGestureDetector();
         }
     }
 }

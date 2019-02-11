@@ -7,7 +7,7 @@
         
         xmlns:local="clr-namespace:KinectMultimediaPlayer"
         mc:Ignorable="d"
-        Title="Video Player" Height="450" Width="800" Background="#FF3E3E3E">
+        Title="Video Player" Height="450" Width="800" Background="#FF3E3E3E" Loaded="Window_Loaded">
     <Grid>
         <k:KinectRegion Name="kinectRegion">
             <Grid>

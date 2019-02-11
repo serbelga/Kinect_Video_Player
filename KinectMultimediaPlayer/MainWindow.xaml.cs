@@ -4,6 +4,7 @@ using Microsoft.Kinect.Toolkit;
 using Microsoft.Kinect;
 using Microsoft.Kinect.Toolkit.Controls;
 using System.IO;
+using Kinect.Toolbox;
 
 namespace KinectMultimediaPlayer
 {
@@ -18,12 +19,20 @@ namespace KinectMultimediaPlayer
         /// List of FileInfo. Videos in Assets folder
         /// </summary>
         public FileInfo[] videos;
-         
+
+        private SwipeGestureDetector swipeGestureDetector;
+
+        private KinectSensor sensor;
+
+        private VideoPlayer videoPlayer;
+
+
         /// <summary>
         /// Class constructor
         /// </summary>
         public MainWindow()
         {
+
             InitializeComponent();
             DirectoryInfo directoryInfo = new DirectoryInfo(@"Assets");
             videos = directoryInfo.GetFiles("*.mp4");
@@ -59,9 +68,11 @@ namespace KinectMultimediaPlayer
 
         {
             KinectTileButton button = (KinectTileButton) sender;
-            VideoPlayer videoPlayer = new VideoPlayer(button.Tag as String);
-            videoPlayer.Show();
-            this.Close();
+            //VideoPlayer videoPlayer = new VideoPlayer(button.Tag as String);
+            //videoPlayer.Show();
+            videoPlayer = new VideoPlayer(button.Tag as String);
+            Main.Content = videoPlayer;
+            //this.Close();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -71,7 +82,23 @@ namespace KinectMultimediaPlayer
             this.sensorChooserUi.KinectSensorChooser = this.sensorChooser;
             this.sensorChooser.Start();
         }
-        
+
+        private void OnGestureDetectedSwipe(String gesture)
+        {
+            if (videoPlayer != null)
+            {
+                if (gesture.Contains("Left")) {
+                    videoPlayer.mediaElement.Volume -= 0.1;
+                    videoPlayer.Volume.Content = videoPlayer.mediaElement.Volume.ToString();
+                }
+                else if (gesture.Contains("Right"))
+                {
+                    videoPlayer.mediaElement.Volume += 0.1;
+                    videoPlayer.Volume.Content = videoPlayer.mediaElement.Volume.ToString();
+                }
+            }
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -101,6 +128,10 @@ namespace KinectMultimediaPlayer
                 {
                     args.NewSensor.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
                     args.NewSensor.SkeletonStream.Enable();
+                    args.NewSensor.SkeletonFrameReady += this.SensorSkeletonFrameReady;
+                    swipeGestureDetector = new SwipeGestureDetector();
+                    swipeGestureDetector.OnGestureDetected += OnGestureDetectedSwipe;
+                    sensor = args.NewSensor;
                 }
                 catch (InvalidOperationException)
                 {
@@ -110,6 +141,60 @@ namespace KinectMultimediaPlayer
             if (!error)
             {
                 kinectRegion.KinectSensor = args.NewSensor;
+            }
+        }
+
+        private void BackOnClick(object sender, RoutedEventArgs e)
+        {
+            this.Main.Content = null;
+        }
+
+        private void myFrame_ContentRendered(object sender, EventArgs e)
+        {
+            this.Main.NavigationUIVisibility = System.Windows.Navigation.NavigationUIVisibility.Hidden;
+        }
+
+        /// <summary>
+        /// Event handler for Kinect sensor's SkeletonFrameReady event
+        /// </summary>
+        /// <param name="sender">object sending the event</param>
+        /// <param name="e">event arguments</param>
+        private void SensorSkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs e)
+        {
+            Skeleton[] skeletons = new Skeleton[0];
+
+            using (SkeletonFrame skeletonFrame = e.OpenSkeletonFrame())
+            {
+                if (skeletonFrame != null)
+                {
+                    skeletons = new Skeleton[skeletonFrame.SkeletonArrayLength];
+                    skeletonFrame.CopySkeletonDataTo(skeletons);
+                }
+            }
+            if (skeletons.Length != 0)
+            {
+                foreach (Skeleton skel in skeletons)
+                {
+                    CatchSwipeGesture(skel);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Draws a skeleton's bones and joints
+        /// </summary>
+        /// <param name="skeleton">skeleton to draw</param>
+        /// <param name="drawingContext">drawing context to draw to</param>
+        private void CatchSwipeGesture(Skeleton skeleton)
+        {
+            
+            foreach (Joint joint in skeleton.Joints)
+            {
+                
+                if (joint.JointType == JointType.HandRight && joint.TrackingState == JointTrackingState.Tracked)
+                {
+                    swipeGestureDetector.Add(joint.Position, sensor);
+                }
             }
         }
     }

@@ -1,25 +1,25 @@
-﻿using Microsoft.Kinect;
-using Microsoft.Kinect.Toolkit;
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
 
 namespace KinectMultimediaPlayer
 {
-    
     /// <summary>
-    /// Interaction for VideoPlayer.xaml
+    /// Lógica de interacción para Page1.xaml
     /// </summary>
-    public partial class VideoPlayer : Window
+    public partial class VideoPlayer : Page
     {
-        private KinectSensor sensor;
-        //private SwipeGestureDetector swipeGestureDetector;
-        //private TemplatedGestureDetector circleGestureRecognizer;
-
-
-        /// <summary>
-        /// Class constructor
-        /// </summary>
-        /// <param name="directory">Path to the video file</param>
         public VideoPlayer(String directory)
         {
             InitializeComponent();
@@ -70,52 +70,6 @@ namespace KinectMultimediaPlayer
 
         }
 
-        private void BackOnClick(object sender, RoutedEventArgs e)
-        {
-            MainWindow mainWindow = new MainWindow();
-            mainWindow.Show();
-            this.Close();
-        }
-
-        private void SensorChooserOnKinectChanged(object sender, KinectChangedEventArgs args)
-        {
-            MessageBox.Show(args.NewSensor == null ? "No Kinect" : args.NewSensor.Status.ToString());
-            bool error = false;
-            if (args.OldSensor != null)
-            {
-                try
-                {
-                    args.OldSensor.DepthStream.Range = DepthRange.Default;
-                    args.OldSensor.SkeletonStream.EnableTrackingInNearRange = false;
-                    args.OldSensor.DepthStream.Disable();
-                    args.OldSensor.SkeletonStream.Disable();
-                }
-                catch (InvalidOperationException)
-                {
-                    error = true;
-                }
-            }
-            if (args.NewSensor != null)
-            {
-                try
-                {
-                    args.NewSensor.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
-                    args.NewSensor.SkeletonStream.Enable();
-                }
-                catch (InvalidOperationException)
-                {
-                    error = true;
-                }
-            }
-            if (!error)
-            {
-                kinectRegion.KinectSensor = args.NewSensor;
-            }
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            //swipeGestureDetector = new SwipeGestureDetector();
-        }
+        
     }
 }

@@ -39,6 +39,7 @@ namespace KinectMultimediaPlayer
             {
                 KinectTileButton button = new KinectTileButton();
                 button.Label = videos[i].Name;
+                
                 button.Width = Double.NaN;
                 button.Height = Double.NaN;
                 button.FontSize = 18.0;
@@ -60,6 +61,7 @@ namespace KinectMultimediaPlayer
             KinectTileButton button = (KinectTileButton) sender;
             VideoPlayer videoPlayer = new VideoPlayer(button.Tag as String);
             videoPlayer.Show();
+            this.Close();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

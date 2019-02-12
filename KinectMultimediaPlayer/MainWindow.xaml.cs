@@ -22,6 +22,8 @@ namespace KinectMultimediaPlayer
 
         private SwipeGestureDetector swipeGestureDetector;
 
+        private TemplatedGestureDetector circleGestureRecognizer;
+
         private KinectSensor sensor;
 
         private VideoPlayer videoPlayer;
@@ -72,6 +74,8 @@ namespace KinectMultimediaPlayer
             //videoPlayer.Show();
             videoPlayer = new VideoPlayer(button.Tag as String);
             Main.Content = videoPlayer;
+            this.BackButton.Visibility = Visibility.Visible;
+            this.Toolbar.Visibility = Visibility.Collapsed;
             //this.Close();
         }
 
@@ -89,13 +93,28 @@ namespace KinectMultimediaPlayer
             {
                 if (gesture.Contains("Left")) {
                     videoPlayer.mediaElement.Volume -= 0.1;
-                    videoPlayer.Volume.Content = videoPlayer.mediaElement.Volume.ToString();
+                    videoPlayer.Volume.Content = "Volume: " + videoPlayer.mediaElement.Volume.ToString();
                 }
                 else if (gesture.Contains("Right"))
                 {
                     videoPlayer.mediaElement.Volume += 0.1;
-                    videoPlayer.Volume.Content = videoPlayer.mediaElement.Volume.ToString();
+                    videoPlayer.Volume.Content = "Volume: " + videoPlayer.mediaElement.Volume.ToString();
                 }
+            }
+        }
+
+        /// <summary>
+        /// Backward 
+        /// </summary>
+        /// <param name="gesture"></param>
+        private void OnGestureDetectedCircle(String gesture)
+        {
+
+            TimeSpan ts = videoPlayer.mediaElement.Position;
+            if (!(ts.Seconds < 10 && ts.Minutes == 0))
+            {
+                ts = new TimeSpan(ts.Days, ts.Hours, ts.Minutes, ts.Seconds - 10);
+                videoPlayer.mediaElement.Position = ts;
             }
         }
 
@@ -131,6 +150,11 @@ namespace KinectMultimediaPlayer
                     args.NewSensor.SkeletonFrameReady += this.SensorSkeletonFrameReady;
                     swipeGestureDetector = new SwipeGestureDetector();
                     swipeGestureDetector.OnGestureDetected += OnGestureDetectedSwipe;
+                    using (Stream recordStream = File.Open(Path.Combine(Environment.CurrentDirectory, @"Datos\circleKB.save"), FileMode.Open))
+                    {
+                        circleGestureRecognizer = new TemplatedGestureDetector("Circle", recordStream);
+                        circleGestureRecognizer.OnGestureDetected += OnGestureDetectedCircle;
+                    }
                     sensor = args.NewSensor;
                 }
                 catch (InvalidOperationException)
@@ -147,6 +171,8 @@ namespace KinectMultimediaPlayer
         private void BackOnClick(object sender, RoutedEventArgs e)
         {
             this.Main.Content = null;
+            this.BackButton.Visibility = Visibility.Collapsed;
+            this.Toolbar.Visibility = Visibility.Visible;
         }
 
         private void myFrame_ContentRendered(object sender, EventArgs e)
@@ -175,7 +201,7 @@ namespace KinectMultimediaPlayer
             {
                 foreach (Skeleton skel in skeletons)
                 {
-                    CatchSwipeGesture(skel);
+                    CatchGesture(skel);
                 }
             }
         }
@@ -185,7 +211,7 @@ namespace KinectMultimediaPlayer
         /// </summary>
         /// <param name="skeleton">skeleton to draw</param>
         /// <param name="drawingContext">drawing context to draw to</param>
-        private void CatchSwipeGesture(Skeleton skeleton)
+        private void CatchGesture(Skeleton skeleton)
         {
             
             foreach (Joint joint in skeleton.Joints)
@@ -194,6 +220,10 @@ namespace KinectMultimediaPlayer
                 if (joint.JointType == JointType.HandRight && joint.TrackingState == JointTrackingState.Tracked)
                 {
                     swipeGestureDetector.Add(joint.Position, sensor);
+                }
+                if (joint.JointType == JointType.HandLeft && joint.TrackingState == JointTrackingState.Tracked)
+                {
+                    circleGestureRecognizer.Add(joint.Position, sensor);
                 }
             }
         }

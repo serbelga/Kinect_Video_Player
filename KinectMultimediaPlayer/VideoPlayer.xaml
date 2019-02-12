@@ -14,16 +14,27 @@
         <Grid>
             <MediaElement Name="mediaElement" LoadedBehavior="Manual" UnloadedBehavior="Stop" Stretch="Fill" 
                     MediaOpened="Element_MediaOpened" HorizontalAlignment="Center" MediaEnded="Element_MediaEnded" Grid.Column="1" />
-            <Label Name="Volume" Content="Volume" HorizontalAlignment="Right" VerticalAlignment="Top" Foreground="#FFAEAEAE"></Label>
-            <k:KinectCircleButton HorizontalAlignment="Center" VerticalAlignment="Bottom" FontFamily="Segoe MDL2 Assets" Height="150" Click="PlayOnClick" Margin="314,219,313,0" Foreground="#FFAEAEAE">
-                <TextBlock Text="&#xE768;" Background="{x:Null}" IsEnabled="False"></TextBlock>
-            </k:KinectCircleButton>
-            <k:KinectCircleButton HorizontalAlignment="Center" VerticalAlignment="Bottom" FontFamily="Segoe MDL2 Assets" Height="150" Click="StopOnClick" Margin="149,244,478,0" Foreground="#FFAEAEAE">
-                <TextBlock Text="&#xE777;" Background="{x:Null}" IsEnabled="False"></TextBlock>
-            </k:KinectCircleButton>
-            <k:KinectCircleButton HorizontalAlignment="Center" VerticalAlignment="Bottom" FontFamily="Segoe MDL2 Assets" Height="150" Click="PauseOnClick" Margin="484,244,143,0" Foreground="#FFAEAEAE">
-                <TextBlock Text="&#xEDB4;" Background="{x:Null}" IsEnabled="False"></TextBlock>
-            </k:KinectCircleButton>
+            <Label Name="Volume" Content="Volume: 0.5" HorizontalAlignment="Right" VerticalAlignment="Top" Foreground="#FFAEAEAE" FontSize="24"></Label>
+
+            <Grid Height="Auto" VerticalAlignment="Bottom">
+                <Grid.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#00000000" Offset="0"/>
+                        <GradientStop Color="Black" Offset="1"/>
+                    </LinearGradientBrush>
+                </Grid.Background>
+                <Slider Name="timelineSlider" VerticalAlignment="Bottom" Margin="150" ValueChanged="SeekToMediaPosition" Width="Auto"/>
+                <Slider Name="volumeSlider" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,-650,75" ValueChanged="SeekToMediaPosition" Width="100"/>
+                <k:KinectCircleButton HorizontalAlignment="Center" VerticalAlignment="Bottom" FontFamily="Segoe MDL2 Assets" Height="150" Click="PlayOnClick" Margin="314,219,313,0" Foreground="#FFAEAEAE">
+                    <TextBlock Text="&#xE768;" Background="{x:Null}" IsEnabled="False"></TextBlock>
+                </k:KinectCircleButton>
+                <k:KinectCircleButton HorizontalAlignment="Center" VerticalAlignment="Bottom" FontFamily="Segoe MDL2 Assets" Height="150" Click="StopOnClick" Margin="149,244,478,0" Foreground="#FFAEAEAE">
+                    <TextBlock Text="&#xE777;" Background="{x:Null}" IsEnabled="False"></TextBlock>
+                </k:KinectCircleButton>
+                <k:KinectCircleButton HorizontalAlignment="Center" VerticalAlignment="Bottom" FontFamily="Segoe MDL2 Assets" Height="150" Click="PauseOnClick" Margin="484,244,143,0" Foreground="#FFAEAEAE">
+                    <TextBlock Text="&#xEDB4;" Background="{x:Null}" IsEnabled="False"></TextBlock>
+                </k:KinectCircleButton>
+            </Grid>
         </Grid>
         <k:KinectSensorChooserUI HorizontalAlignment="Center" VerticalAlignment="Top" Name="sensorChooserUi"></k:KinectSensorChooserUI>
     </Grid>

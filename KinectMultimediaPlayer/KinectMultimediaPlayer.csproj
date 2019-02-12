@@ -121,6 +121,7 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Assets\icon.png" />
     <Content Include="Assets\sample.mp4">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

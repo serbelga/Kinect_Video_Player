@@ -8,8 +8,8 @@
         mc:Ignorable="d"
         Title="Kinect Player" Height="450" Width="800" Loaded="Window_Loaded">
     <Grid>
-        
-        <Label Content="Mis Vídeos" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="24,64,0,8" FontFamily="Segoe UI Semibold" FontSize="16"/>
+
+        <Label Content="Mis Vídeos" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="24,96,0,8" FontFamily="Segoe UI Semibold" FontSize="16"/>
         <k:KinectRegion Name="kinectRegion">
             <Grid>
                 <k:KinectScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto" VerticalAlignment="Center" Margin="0,0,0,0">
@@ -20,15 +20,18 @@
 
                 </Frame>
                 <Grid Height="80" VerticalAlignment="Top">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="80"/>
-                    <ColumnDefinition Width="719*"/>
-                </Grid.ColumnDefinitions>
-                <k:KinectCircleButton HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Segoe MDL2 Assets" Height="80" Width="80" Click="BackOnClick" Margin="0,0,0,0" Foreground="#FFAEAEAE" Grid.ColumnSpan="2">
-                    <TextBlock Text="&#xE830;" Background="{x:Null}" IsEnabled="False"></TextBlock>
-                </k:KinectCircleButton>
-                <TextBlock Grid.Column="2"></TextBlock>
-            </Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="719*"/>
+                    </Grid.ColumnDefinitions>
+                    <k:KinectCircleButton Name="BackButton" Visibility="Collapsed" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Segoe MDL2 Assets" Height="80" Width="80" Click="BackOnClick" Margin="0,0,0,0" Foreground="#FFAEAEAE" Grid.ColumnSpan="2">
+                        <TextBlock Text="&#xE830;" Background="{x:Null}" IsEnabled="False"></TextBlock>
+                    </k:KinectCircleButton>
+                    <Grid Name="Toolbar" Grid.Column="2">
+                        <Image Source="Assets/icon.png" VerticalAlignment="Center" HorizontalAlignment="Left" Height="56" Width="56"></Image>
+                        <TextBlock Margin="64,30,207,30" VerticalAlignment="Center" HorizontalAlignment="Left" FontWeight="Bold" FontFamily="Trebuchet MS" FontSize="16">Kinect Video Player</TextBlock>
+                    </Grid>
+                </Grid>
             </Grid>
         </k:KinectRegion>
         <k:KinectSensorChooserUI HorizontalAlignment="Center" VerticalAlignment="Top" Name="sensorChooserUi"></k:KinectSensorChooserUI>

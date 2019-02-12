@@ -65,11 +65,22 @@ namespace KinectMultimediaPlayer
             //TODO : Hide video controls + Show Restart and Back
         }
 
-        private void Element_MediaOpened(object sender, RoutedEventArgs e)
+        private void Element_MediaOpened(object sender, EventArgs e)
         {
-
+            timelineSlider.Maximum = mediaElement.NaturalDuration.TimeSpan.TotalMilliseconds;
         }
 
-        
+        // Jump to different parts of the media (seek to). 
+        private void SeekToMediaPosition(object sender, RoutedPropertyChangedEventArgs<double> args)
+        {
+            int SliderValue = (int)timelineSlider.Value;
+
+            // Overloaded constructor takes the arguments days, hours, minutes, seconds, miniseconds.
+            // Create a TimeSpan with miliseconds equal to the slider value.
+            TimeSpan ts = new TimeSpan(0, 0, 0, 0, SliderValue);
+            mediaElement.Position = ts;
+        }
+
+
     }
 }

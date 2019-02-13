@@ -32,8 +32,8 @@
                 <k:KinectCircleButton Name="PauseButton" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontFamily="Segoe MDL2 Assets" Height="150" Click="PauseOnClick" Margin="484,0,143,0" Foreground="#FFAEAEAE">
                     <TextBlock Text="&#xEDB4;" Background="{x:Null}" IsEnabled="False"></TextBlock>
                 </k:KinectCircleButton>
-                <k:KinectScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto" Margin="0,0,0,0">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Name="scrollContent" Height="200">
+                <k:KinectScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto" Margin="0,0,0,150">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Name="scrollContent" Height="150">
                     </StackPanel>
                 </k:KinectScrollViewer>
             </Grid>

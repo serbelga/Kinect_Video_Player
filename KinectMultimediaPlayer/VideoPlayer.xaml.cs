@@ -23,6 +23,7 @@ namespace KinectMultimediaPlayer
     public partial class VideoPlayer : Page
     {
         private Uri uri;
+        private List<double> positions;
         public VideoPlayer(String directory)
         {
             InitializeComponent();
@@ -32,6 +33,8 @@ namespace KinectMultimediaPlayer
             
             
             mediaElement.Play();
+            
+
         }
 
         /*
@@ -94,13 +97,18 @@ namespace KinectMultimediaPlayer
 
         private void setTimeLine(Uri uri)
         {
+            positions = new List<double>();
+            var frameLength = mediaElement.NaturalDuration.TimeSpan.TotalSeconds / 10;
+            for (var i = 0; i < 10; i++)
+            {
+                positions.Add(i * frameLength);
+            }
             MediaPlayer mediaPlayer = new MediaPlayer();
-
 
             mediaPlayer.ScrubbingEnabled = true;
             mediaPlayer.Open(uri);
             mediaPlayer.Play();
-            mediaPlayer.Position = TimeSpan.FromSeconds(50);
+            mediaPlayer.Position = TimeSpan.FromSeconds(0);
             mediaPlayer.MediaOpened += new EventHandler(mediaplayer_OpenMedia);
         }
 
@@ -110,42 +118,55 @@ namespace KinectMultimediaPlayer
             //*create mediaplayer in memory and jump to position 
             //< draw video_image > 
             MediaPlayer mediaPlayer = sender as MediaPlayer;
-            var position = mediaPlayer.Position;
-            DrawingVisual drawingVisual = new DrawingVisual();
-            DrawingContext drawingContext = drawingVisual.RenderOpen();
-            drawingContext.DrawVideo(mediaPlayer, new Rect(0, 0, 160, 100));
-            drawingContext.Close();
-
-            double dpiX = 1 / 200;
-            double dpiY = 1 / 200;
-            RenderTargetBitmap bmp = new RenderTargetBitmap(160, 100, dpiX, dpiY, PixelFormats.Pbgra32);
-            bmp.Render(drawingVisual);
-            //</ draw video_image > 
-
-            //< set Image > 
-            Image newImage = new Image();
-            newImage.Source = bmp;
-            newImage.Stretch = Stretch.Uniform;
-            newImage.Width = 100;
-            //</ set Image > 
-
-            //< add > 
-            KinectTileButton button = new KinectTileButton();
-            button.Label = "test";
-
-            button.Width = 200;
-            button.Height = 200;
-            button.FontSize = 18.0;
-            button.Content = newImage;
-            //button.Tag = videos[i].FullName.ToString();
-
-            scrollContent.Children.Insert(0, button);
-
-
-            button.Click += (o, re) =>
+            for (int i = 0; i < 10; i++)
             {
-                mediaElement.Position = position;
-            };
+                var position = mediaPlayer.Position;
+                var ts = new TimeSpan(position.Hours, position.Minutes, Convert.ToInt32(positions.ElementAt(i)));
+                mediaPlayer.Position = ts;
+                DrawingVisual drawingVisual = new DrawingVisual();
+                DrawingContext drawingContext = drawingVisual.RenderOpen();
+                drawingContext.DrawVideo(mediaPlayer, new Rect(0, 0, 160, 100));
+                
+                drawingContext.Close();
+
+                double dpiX = 1 / 200;
+                double dpiY = 1 / 200;
+                RenderTargetBitmap bmp = new RenderTargetBitmap(160, 100, dpiX, dpiY, PixelFormats.Pbgra32);
+                bmp.Render(drawingVisual);
+
+
+                //</ draw video_image > 
+
+                //< set Image > 
+                Image newImage = new Image();
+                newImage.Source = bmp;
+                newImage.Stretch = Stretch.Uniform;
+                newImage.Width = 200;
+                newImage.Height = 120;
+
+                //</ set Image > 
+
+                //< add > 
+                KinectTileButton button = new KinectTileButton();
+                button.Label = ts.ToString();
+                button.Background = Brushes.Black;
+
+                button.Width = 200;
+                button.Height = 120;
+                button.FontSize = 12.0;
+
+                button.Content = newImage;
+                //button.Tag = videos[i].FullName.ToString();
+
+                scrollContent.Children.Add(button);
+
+
+                button.Click += (o, re) =>
+                {
+                    mediaElement.Position = ts;
+                };
+            }
+            
             //</ add > 
             //----------------< mediaplayer_OpenMedia() >---------------- 
         }

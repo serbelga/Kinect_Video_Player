@@ -34,11 +34,23 @@ namespace KinectMultimediaPlayer
         /// </summary>
         public MainWindow()
         {
-
             InitializeComponent();
             DirectoryInfo directoryInfo = new DirectoryInfo(@"Assets");
             videos = directoryInfo.GetFiles("*.mp4");
             BuildListView();
+        }
+
+        /// <summary>
+        /// Window Loaded
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.sensorChooser = new KinectSensorChooser();
+            this.sensorChooser.KinectChanged += SensorChooserOnKinectChanged;
+            this.sensorChooserUi.KinectSensorChooser = this.sensorChooser;
+            this.sensorChooser.Start();
         }
 
         /// <summary>
@@ -70,23 +82,16 @@ namespace KinectMultimediaPlayer
 
         {
             KinectTileButton button = (KinectTileButton) sender;
-            //VideoPlayer videoPlayer = new VideoPlayer(button.Tag as String);
-            //videoPlayer.Show();
             videoPlayer = new VideoPlayer(button.Tag as String);
             Main.Content = videoPlayer;
             this.BackButton.Visibility = Visibility.Visible;
             this.Toolbar.Visibility = Visibility.Collapsed;
-            //this.Close();
         }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            this.sensorChooser = new KinectSensorChooser();
-            this.sensorChooser.KinectChanged += SensorChooserOnKinectChanged;
-            this.sensorChooserUi.KinectSensorChooser = this.sensorChooser;
-            this.sensorChooser.Start();
-        }
-
+       
+        /// <summary>
+        /// Up and down volume
+        /// </summary>
+        /// <param name="gesture"></param>
         private void OnGestureDetectedSwipe(String gesture)
         {
             if (videoPlayer != null)
@@ -104,7 +109,7 @@ namespace KinectMultimediaPlayer
         }
 
         /// <summary>
-        /// Backward 
+        /// Video back when detects circle
         /// </summary>
         /// <param name="gesture"></param>
         private void OnGestureDetectedCircle(String gesture)
@@ -199,9 +204,9 @@ namespace KinectMultimediaPlayer
             }
             if (skeletons.Length != 0)
             {
-                foreach (Skeleton skel in skeletons)
+                foreach (Skeleton skeleton in skeletons)
                 {
-                    CatchGesture(skel);
+                    CatchGestures(skeleton);
                 }
             }
         }
@@ -211,7 +216,7 @@ namespace KinectMultimediaPlayer
         /// </summary>
         /// <param name="skeleton">skeleton to draw</param>
         /// <param name="drawingContext">drawing context to draw to</param>
-        private void CatchGesture(Skeleton skeleton)
+        private void CatchGestures(Skeleton skeleton)
         {
             
             foreach (Joint joint in skeleton.Joints)

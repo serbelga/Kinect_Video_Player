@@ -1,6 +1,7 @@
 ﻿using Microsoft.Kinect.Toolkit.Controls;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -105,11 +106,13 @@ namespace KinectMultimediaPlayer
             }
             MediaPlayer mediaPlayer = new MediaPlayer();
 
-            mediaPlayer.ScrubbingEnabled = true;
-            mediaPlayer.Open(uri);
-            mediaPlayer.Play();
-            mediaPlayer.Position = TimeSpan.FromSeconds(0);
-            mediaPlayer.MediaOpened += new EventHandler(mediaplayer_OpenMedia);
+                        mediaPlayer.ScrubbingEnabled = true;
+                       mediaPlayer.Open(uri);
+                        mediaPlayer.Pause();
+                        mediaPlayer.Position = TimeSpan.FromSeconds(0);
+
+                        mediaPlayer.MediaOpened += new EventHandler(mediaplayer_OpenMedia);
+            //ImportMedia(uri, 1, 20);
         }
 
         private void mediaplayer_OpenMedia(object sender, EventArgs e)
@@ -121,11 +124,12 @@ namespace KinectMultimediaPlayer
             for (int i = 0; i < 10; i++)
             {
                 var position = mediaPlayer.Position;
-                var ts = new TimeSpan(position.Hours, position.Minutes, Convert.ToInt32(positions.ElementAt(i)));
+                var ts = new TimeSpan(0, 0, Convert.ToInt32(positions.ElementAt(i)));
                 mediaPlayer.Position = ts;
                 DrawingVisual drawingVisual = new DrawingVisual();
                 DrawingContext drawingContext = drawingVisual.RenderOpen();
                 drawingContext.DrawVideo(mediaPlayer, new Rect(0, 0, 160, 100));
+
                 
                 drawingContext.Close();
 
@@ -154,8 +158,9 @@ namespace KinectMultimediaPlayer
                 button.Width = 200;
                 button.Height = 120;
                 button.FontSize = 12.0;
-
+                newImage = null;
                 button.Content = newImage;
+                
                 //button.Tag = videos[i].FullName.ToString();
 
                 scrollContent.Children.Add(button);
@@ -165,10 +170,77 @@ namespace KinectMultimediaPlayer
                 {
                     mediaElement.Position = ts;
                 };
+                
             }
-            
             //</ add > 
             //----------------< mediaplayer_OpenMedia() >---------------- 
+        }
+
+
+        void ImportMedia(Uri mediaFile, int waitTime, int position)
+        {
+            MediaPlayer player = new MediaPlayer { Volume = 0, ScrubbingEnabled = true };
+            player.Open(mediaFile);
+            player.Pause();
+            
+            //We need to give MediaPlayer some time to load. 
+            //The efficiency of the MediaPlayer depends                 
+            //upon the capabilities of the machine it is running on and 
+            //would be different from time to time
+            System.Threading.Thread.Sleep(waitTime * 1000);
+
+            //120 = thumbnail width, 90 = thumbnail height and 96x96 = horizontal x vertical DPI
+            //In an real application, you would not probably use hard coded values!
+            double dpiX = 1 / 200;
+            double dpiY = 1 / 200;
+            RenderTargetBitmap rtb = new RenderTargetBitmap(160, 100, dpiX, dpiY, PixelFormats.Pbgra32);
+
+            DrawingVisual dv = new DrawingVisual();
+            using (DrawingContext dc = dv.RenderOpen())
+            {
+                player.Position = TimeSpan.FromSeconds(position);
+                dc.DrawVideo(player, new Rect(0, 0, 160, 100));
+            }
+            rtb.Render(dv);
+            Duration duration = player.NaturalDuration;
+            int videoLength = 0;
+            if (duration.HasTimeSpan)
+            {
+                videoLength = (int)duration.TimeSpan.TotalSeconds;
+            }
+            BitmapFrame frame = BitmapFrame.Create(rtb).GetCurrentValueAsFrozen() as BitmapFrame;
+            BitmapEncoder encoder = new JpegBitmapEncoder();
+            encoder.Frames.Add(frame as BitmapFrame);
+            MemoryStream memoryStream = new MemoryStream();
+            encoder.Save(memoryStream);
+            //Here we have the thumbnail in the MemoryStream!
+            player.Close();
+            Image newImage = new Image();
+            newImage.Stretch = Stretch.Uniform;
+            newImage.Width = 200;
+            newImage.Height = 120;
+
+            //</ set Image > 
+
+            //< add > 
+            KinectTileButton button = new KinectTileButton();
+            button.Label = "a";
+            button.Background = Brushes.Black;
+
+            button.Width = 200;
+            button.Height = 120;
+            button.FontSize = 12.0;
+
+            button.Content = newImage;
+            //button.Tag = videos[i].FullName.ToString();
+
+            scrollContent.Children.Add(button);
+
+
+            button.Click += (o, re) =>
+            {
+                mediaElement.Position = TimeSpan.FromSeconds(position);
+            };
         }
 
         /// <summary>

@@ -14,7 +14,7 @@
         <Grid>
             <MediaElement Name="mediaElement" LoadedBehavior="Manual" UnloadedBehavior="Stop" Stretch="Fill" 
                     MediaOpened="Element_MediaOpened" HorizontalAlignment="Center" MediaEnded="Element_MediaEnded" Grid.Column="1" />
-            <Label Name="Volume" Content="Volume: 0.5" HorizontalAlignment="Right" VerticalAlignment="Top" Foreground="#FFAEAEAE" FontSize="24"></Label>
+            <Label Name="Volume" Content="&#xE994;" HorizontalAlignment="Right" VerticalAlignment="Top" Foreground="#FFAEAEAE" FontSize="36" FontFamily="Segoe MDL2 Assets"></Label>
 
             <Grid Height="Auto" VerticalAlignment="Bottom">
                 <Grid.Background>

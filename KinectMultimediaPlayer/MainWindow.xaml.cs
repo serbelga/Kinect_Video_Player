@@ -88,11 +88,7 @@ namespace KinectMultimediaPlayer
                 double dpiY = 1 / 200;
                 RenderTargetBitmap bmp = new RenderTargetBitmap(160, 100, dpiX, dpiY, PixelFormats.Pbgra32);
                 bmp.Render(drawingVisual);
-
-
-                //</ draw video_image > 
-
-                //< set Image > 
+                
                 Image newImage = new Image();
                 newImage.Source = bmp;
                 newImage.Stretch = Stretch.Uniform;
@@ -109,13 +105,7 @@ namespace KinectMultimediaPlayer
                 button.Width = 200;
                 button.Height = 120;
                 button.Background = Brushes.Black;
-
-               
                 button.FontSize = 12.0;
-
-                button.Content = newImage;
-
-
                 button.Content = newImage;
                 button.Click += ScrollButtonClick;
                 scrollContent.Children.Add(button);
@@ -196,7 +186,7 @@ namespace KinectMultimediaPlayer
         /// <param name="args"></param>
         private void SensorChooserOnKinectChanged(object sender, KinectChangedEventArgs args)
         {
-            MessageBox.Show(args.NewSensor == null ? "No Kinect" : args.NewSensor.Status.ToString());
+            //MessageBox.Show(args.NewSensor == null ? "No Kinect" : args.NewSensor.Status.ToString());
             bool error = false;
             if (args.OldSensor != null)
             {

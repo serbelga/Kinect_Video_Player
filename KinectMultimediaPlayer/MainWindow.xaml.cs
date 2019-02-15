@@ -170,12 +170,14 @@ namespace KinectMultimediaPlayer
         /// <param name="gesture"></param>
         private void OnGestureDetectedCircle(String gesture)
         {
-
-            TimeSpan ts = videoPlayer.mediaElement.Position;
-            if (!(ts.Seconds < 10 && ts.Minutes == 0))
+            if (videoPlayer != null)
             {
-                ts = new TimeSpan(ts.Days, ts.Hours, ts.Minutes, ts.Seconds - 10);
-                videoPlayer.mediaElement.Position = ts;
+                TimeSpan ts = videoPlayer.mediaElement.Position;
+                if (!(ts.Seconds < 10 && ts.Minutes == 0))
+                {
+                    ts = new TimeSpan(ts.Days, ts.Hours, ts.Minutes, ts.Seconds - 10);
+                    videoPlayer.mediaElement.Position = ts;
+                }
             }
         }
 

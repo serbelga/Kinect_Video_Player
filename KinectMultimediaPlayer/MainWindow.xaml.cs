@@ -5,6 +5,9 @@ using Microsoft.Kinect;
 using Microsoft.Kinect.Toolkit.Controls;
 using System.IO;
 using Kinect.Toolbox;
+using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace KinectMultimediaPlayer
 {
@@ -34,11 +37,23 @@ namespace KinectMultimediaPlayer
         /// </summary>
         public MainWindow()
         {
-
             InitializeComponent();
             DirectoryInfo directoryInfo = new DirectoryInfo(@"Assets");
             videos = directoryInfo.GetFiles("*.mp4");
             BuildListView();
+        }
+
+        /// <summary>
+        /// Window Loaded
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.sensorChooser = new KinectSensorChooser();
+            this.sensorChooser.KinectChanged += SensorChooserOnKinectChanged;
+            this.sensorChooserUi.KinectSensorChooser = this.sensorChooser;
+            this.sensorChooser.Start();
         }
 
         /// <summary>
@@ -48,17 +63,53 @@ namespace KinectMultimediaPlayer
         {
             for (int i = 0; i < videos.Length; i++)
             {
-                KinectTileButton button = new KinectTileButton();
-                button.Label = videos[i].Name;
+                BuildListItem(videos[i].FullName.ToString(), videos[i].Name);
+            }
+        }
+
+        private void BuildListItem(String path, String name)
+        {
+            MediaPlayer mediaPlayer = new MediaPlayer();
+            mediaPlayer.ScrubbingEnabled = true;
+            Uri uri = new Uri(path);
+            mediaPlayer.Open(uri);
+            mediaPlayer.Pause();
+            mediaPlayer.Position = TimeSpan.FromSeconds(30);
+            mediaPlayer.MediaOpened += new EventHandler(delegate(Object o, EventArgs e)
+            {
+                MediaPlayer mediaPlayer1 = o as MediaPlayer;
+
+                DrawingVisual drawingVisual = new DrawingVisual();
+                DrawingContext drawingContext = drawingVisual.RenderOpen();
+                drawingContext.DrawVideo(mediaPlayer1, new Rect(0, 0, 160, 100));
+                drawingContext.Close();
+
+                double dpiX = 1 / 200;
+                double dpiY = 1 / 200;
+                RenderTargetBitmap bmp = new RenderTargetBitmap(160, 100, dpiX, dpiY, PixelFormats.Pbgra32);
+                bmp.Render(drawingVisual);
                 
+                Image newImage = new Image();
+                newImage.Source = bmp;
+                newImage.Stretch = Stretch.Uniform;
+                newImage.Width = 200;
+                newImage.Height = 120;
+
+                KinectTileButton button = new KinectTileButton();
+                button.Label = name;
+
                 button.Width = Double.NaN;
                 button.Height = Double.NaN;
                 button.FontSize = 18.0;
-                button.Tag = videos[i].FullName.ToString();
-
-                scrollContent.Children.Insert(0, button);
+                button.Tag = path;
+                button.Width = 200;
+                button.Height = 120;
+                button.Background = Brushes.Black;
+                button.FontSize = 12.0;
+                button.Content = newImage;
                 button.Click += ScrollButtonClick;
-            }
+                scrollContent.Children.Add(button);
+            });
         }
 
         /// <summary>
@@ -67,44 +118,54 @@ namespace KinectMultimediaPlayer
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void ScrollButtonClick(object sender, RoutedEventArgs e)
-
         {
             KinectTileButton button = (KinectTileButton) sender;
-            //VideoPlayer videoPlayer = new VideoPlayer(button.Tag as String);
-            //videoPlayer.Show();
             videoPlayer = new VideoPlayer(button.Tag as String);
             Main.Content = videoPlayer;
             this.BackButton.Visibility = Visibility.Visible;
             this.Toolbar.Visibility = Visibility.Collapsed;
-            //this.Close();
         }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            this.sensorChooser = new KinectSensorChooser();
-            this.sensorChooser.KinectChanged += SensorChooserOnKinectChanged;
-            this.sensorChooserUi.KinectSensorChooser = this.sensorChooser;
-            this.sensorChooser.Start();
-        }
-
+       
+        /// <summary>
+        /// Up and down volume
+        /// </summary>
+        /// <param name="gesture"></param>
         private void OnGestureDetectedSwipe(String gesture)
         {
             if (videoPlayer != null)
             {
                 if (gesture.Contains("Left")) {
                     videoPlayer.mediaElement.Volume -= 0.1;
-                    videoPlayer.Volume.Content = "Volume: " + videoPlayer.mediaElement.Volume.ToString();
                 }
                 else if (gesture.Contains("Right"))
                 {
                     videoPlayer.mediaElement.Volume += 0.1;
-                    videoPlayer.Volume.Content = "Volume: " + videoPlayer.mediaElement.Volume.ToString();
                 }
+                var newVolume = videoPlayer.mediaElement.Volume;
+                var newVolumeText = (newVolume * 20).ToString();
+                if (newVolume < 0.01)
+                {
+                    newVolumeText = "0";
+                }
+                if (newVolume < 0.2)
+                {
+                    videoPlayer.Volume.Content = "\xE992";
+                } else if (newVolume >= 0.2 && newVolume < 0.5)
+                {
+                    videoPlayer.Volume.Content = "\xE993";
+                } else if (newVolume >= 0.5 && newVolume < 0.8)
+                {
+                    videoPlayer.Volume.Content = "\xE994";
+                } else if (newVolume >= 0.8)
+                {
+                    videoPlayer.Volume.Content = "\xE995";
+                }
+                videoPlayer.VolumeText.Content = newVolumeText;
             }
         }
 
         /// <summary>
-        /// Backward 
+        /// Video back when detects circle
         /// </summary>
         /// <param name="gesture"></param>
         private void OnGestureDetectedCircle(String gesture)
@@ -125,7 +186,7 @@ namespace KinectMultimediaPlayer
         /// <param name="args"></param>
         private void SensorChooserOnKinectChanged(object sender, KinectChangedEventArgs args)
         {
-            MessageBox.Show(args.NewSensor == null ? "No Kinect" : args.NewSensor.Status.ToString());
+            //MessageBox.Show(args.NewSensor == null ? "No Kinect" : args.NewSensor.Status.ToString());
             bool error = false;
             if (args.OldSensor != null)
             {
@@ -199,9 +260,9 @@ namespace KinectMultimediaPlayer
             }
             if (skeletons.Length != 0)
             {
-                foreach (Skeleton skel in skeletons)
+                foreach (Skeleton skeleton in skeletons)
                 {
-                    CatchGesture(skel);
+                    CatchGestures(skeleton);
                 }
             }
         }
@@ -211,7 +272,7 @@ namespace KinectMultimediaPlayer
         /// </summary>
         /// <param name="skeleton">skeleton to draw</param>
         /// <param name="drawingContext">drawing context to draw to</param>
-        private void CatchGesture(Skeleton skeleton)
+        private void CatchGestures(Skeleton skeleton)
         {
             
             foreach (Joint joint in skeleton.Joints)

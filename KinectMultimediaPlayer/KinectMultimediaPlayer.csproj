@@ -122,9 +122,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\icon.png" />
-    <Content Include="Assets\sample.mp4">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

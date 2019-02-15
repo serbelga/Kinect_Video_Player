@@ -9,9 +9,9 @@
         Title="Kinect Player" Height="450" Width="800" Loaded="Window_Loaded">
     <Grid>
 
-        <Label Content="Mis Vídeos" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="24,96,0,8" FontFamily="Segoe UI Semibold" FontSize="16"/>
         <k:KinectRegion Name="kinectRegion">
             <Grid>
+                <Label Content="Mis Vídeos" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="24,0,0,200" FontFamily="Segoe UI Semibold" FontSize="16"/>
                 <k:KinectScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto" VerticalAlignment="Center" Margin="0,0,0,0">
                     <StackPanel Orientation="Horizontal" Name="scrollContent" Height="169">
                     </StackPanel>

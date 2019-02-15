@@ -19,7 +19,7 @@ using System.Windows.Shapes;
 namespace KinectMultimediaPlayer
 {
     /// <summary>
-    /// Lógica de interacción para Page1.xaml
+    /// Interaction for VideoPlayer.xaml
     /// </summary>
     public partial class VideoPlayer : Page
     {

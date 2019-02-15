@@ -152,19 +152,25 @@ namespace KinectMultimediaPlayer
                     videoPlayer.mediaElement.Volume += 0.1;
                 }
                 var newVolume = videoPlayer.mediaElement.Volume;
+                var newVolumeText = (newVolume * 20).ToString();
+                if (newVolume < 0.01)
+                {
+                    newVolumeText = "0";
+                }
                 if (newVolume < 0.2)
                 {
-                    videoPlayer.Volume.Content = "&#xE992;";
+                    videoPlayer.Volume.Content = "\xE992";
                 } else if (newVolume >= 0.2 && newVolume < 0.5)
                 {
-                    videoPlayer.Volume.Content = "&#xE993;";
+                    videoPlayer.Volume.Content = "\xE993";
                 } else if (newVolume >= 0.5 && newVolume < 0.8)
                 {
-                    videoPlayer.Volume.Content = "&#xE994;";
+                    videoPlayer.Volume.Content = "\xE994";
                 } else if (newVolume >= 0.8)
                 {
-                    videoPlayer.Volume.Content = "&#xE995;";
+                    videoPlayer.Volume.Content = "\xE995";
                 }
+                videoPlayer.VolumeText.Content = newVolumeText;
             }
         }
 

@@ -30,12 +30,7 @@ namespace KinectMultimediaPlayer
             InitializeComponent();
             uri = new Uri(directory);
             mediaElement.Source = uri;
-
-            
-            
             mediaElement.Play();
-            
-
         }
 
         private void setTimeLine(Uri uri)
@@ -61,7 +56,7 @@ namespace KinectMultimediaPlayer
                 for (int i = 0; i < positions.Count; i++)
                 {
                     var ts = new TimeSpan(0, 0, Convert.ToInt32(positions.ElementAt(i)));
-                    mediaPlayer.Play();
+                    mediaPlayer1.Play();
                     mediaPlayer1.Position = ts;
                     DrawingVisual drawingVisual = new DrawingVisual();
                     DrawingContext drawingContext = drawingVisual.RenderOpen();
@@ -95,7 +90,8 @@ namespace KinectMultimediaPlayer
                         mediaElement.Position = ts;
                     };
                     scrollContent.Children.Add(button);
-                    mediaPlayer.Pause();
+                    mediaPlayer1.Pause();
+                    
                 }
                 mediaPlayer.Close();
             });

@@ -14,8 +14,10 @@
         <Grid>
             <MediaElement Name="mediaElement" LoadedBehavior="Manual" UnloadedBehavior="Stop" Stretch="Fill" 
                     MediaOpened="Element_MediaOpened" HorizontalAlignment="Center" MediaEnded="Element_MediaEnded" Grid.Column="1" />
-            <Label Name="Volume" Content="&#xE994;" HorizontalAlignment="Right" VerticalAlignment="Top" Foreground="#FFAEAEAE" FontSize="36" FontFamily="Segoe MDL2 Assets"></Label>
-
+            <Grid Height="Auto" Width="Auto" VerticalAlignment="Top" HorizontalAlignment="Right" Background="#66000000">
+                <Label Name="Volume" Content="&#xE994;" HorizontalAlignment="Right" VerticalAlignment="Top" Foreground="#FFAEAEAE" FontSize="36" FontFamily="Segoe MDL2 Assets"></Label>
+                <Label Name="VolumeText" Content="10" HorizontalAlignment="Right" VerticalAlignment="Top" Foreground="#FFAEAEAE" FontSize="18" Margin="0,5,52,0"></Label>
+            </Grid>
             <Grid Height="Auto" VerticalAlignment="Bottom">
                 <Grid.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
